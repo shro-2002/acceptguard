@@ -1,6 +1,6 @@
 # AcceptGuard plan v2
 
-Status: plan approved in principle; no implementation code yet.
+Status: implemented. This is the original build plan, kept for the record; see README.md for the current state.
 Date rules live in `.claude/rules/legal-logic.md` (authoritative until `interpretations.py` exists).
 Extraction and verification rules live in `.claude/rules/extraction.md`; evaluation rules in `.claude/rules/evaluation.md`.
 

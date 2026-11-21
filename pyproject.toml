@@ -1,7 +1,7 @@
 [project]
 name = "acceptguard"
 version = "0.1.0"
-description = "Add your description here"
+description = "Evidence-backed MSME payment deadlines for s.43B(h) review: Gemini extracts, Python verifies, an accountant decides."
 authors = [
     { name = "shro-2002", email = "96790181+shro-2002@users.noreply.github.com" }
 ]
