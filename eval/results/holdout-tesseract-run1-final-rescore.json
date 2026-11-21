@@ -3,7 +3,7 @@
     "model_id": "gemini-3.5-flash-lite",
     "prompt_sha256": "2d9043fdffc0",
     "ocr": "tesseract",
-    "run_at": "2026-11-22T00:04:31",
+    "run_at": "2026-11-22T00:28:04",
     "data": "eval/data/holdout"
   },
   "summary": {
@@ -363,8 +363,8 @@
     "VPW-2210/challan.png": 0.001,
     "VPW-2210/whatsapp_export.txt": 0.001,
     "KSF-0094/challan.png": 0.001,
-    "KSF-0094/letter.pdf": 0.001,
-    "DP-0418/challan.png": 0.002,
+    "KSF-0094/letter.pdf": 0.002,
+    "DP-0418/challan.png": 0.001,
     "VPW-2215/challan.png": 0.001,
     "VPW-2215/rejection.eml": 0.002,
     "VPW-2215/replacement.eml": 0.001,
