@@ -6,3 +6,5 @@ __pycache__/
 CLAUDE.local.md
 .claude/settings.local.json
 out/
+node_modules/
+demo-video/

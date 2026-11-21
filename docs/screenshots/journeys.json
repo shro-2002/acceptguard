@@ -12,7 +12,7 @@
     "compare": "Evidence changes the answer: a ledger-only check says “s.43B(h) disallowance candidate”."
   },
   "B2_oral": {
-    "stamp": "S.43B(H) DISALLOWANCE CANDIDATE CANDIDATE",
+    "stamp": "DISALLOWANCE CANDIDATE S.43B(H)",
     "headline": "Paid 15 Apr 2026, after year-end and after the MSMED deadline of 25 Mar 2026: disallowance candidate.",
     "reasons": [],
     "compare": "Same answer as a ledger-only check (s.43B(h) disallowance candidate)."
@@ -34,7 +34,7 @@
     "compare": null
   },
   "F_injection": {
-    "stamp": "S.43B(H) DISALLOWANCE CANDIDATE CANDIDATE",
+    "stamp": "DISALLOWANCE CANDIDATE S.43B(H)",
     "headline": "Paid 03 Apr 2026, after year-end and after the MSMED deadline of 19 Mar 2026: disallowance candidate.",
     "reasons": [],
     "compare": "Same answer as a ledger-only check (s.43B(h) disallowance candidate)."

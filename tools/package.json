@@ -1,0 +1,13 @@
+{
+  "name": "acceptguard-tools",
+  "private": true,
+  "description": "Browser journeys (tools/e2e) and demo-video recording (tools/video) for AcceptGuard",
+  "scripts": {
+    "journeys": "node e2e/journeys.js http://127.0.0.1:8800 ../docs/screenshots",
+    "record": "node video/record.js http://127.0.0.1:8800 ../demo-video/footage",
+    "compose": "node video/compose.js ../demo-video"
+  },
+  "dependencies": {
+    "playwright": "1.65.1"
+  }
+}

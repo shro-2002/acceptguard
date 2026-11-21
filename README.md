@@ -98,9 +98,15 @@ PYTHONPATH=src uv run --env-file .env acceptguard eval/data/dev/ledger.csv eval/
 ### Tests and evaluation
 
 ```bash
-uv run pytest                     # 134 tests, no API key needed
+uv run pytest                     # 135 tests, no API key needed
 PYTHONPATH=src uv run --env-file .env python eval/score.py eval/data/holdout2 --ocr tesseract --cache-dir .cache/fresh --tag mine
 PYTHONPATH=src uv run python eval/report.py   # rebuild docs/EVALUATION_TABLES.md
+```
+
+Browser journeys (Playwright; start the app first, optionally a second copy on port 8801 with an invalid key to exercise the provider-outage path):
+
+```bash
+cd tools && npm install && node e2e/journeys.js http://127.0.0.1:8800 ../docs/screenshots http://127.0.0.1:8801
 ```
 
 | Variable | Required | Purpose |
@@ -127,7 +133,8 @@ src/acceptguard/
   pipeline.py         one code path for CLI, web and evaluation
   web/                FastAPI app, explanations, static UI
 eval/                 dev and held-out sets, generators, scorer, results
-tests/                134 tests
+tests/                135 tests
+tools/                Playwright journeys and demo-video scripts
 ```
 
 ## Technology
