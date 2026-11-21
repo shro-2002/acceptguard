@@ -8,6 +8,8 @@
 
 Built for Google Cloud Gen AI Academy APAC, *Meet the Builders 2026*. Live demo: **[acceptguard.onrender.com](https://acceptguard.onrender.com)** (free tier; the first request after idle can take about a minute to wake). Demo video: *link added at submission*.
 
+**UI walkthrough:** 21 end-to-end screenshots (landing, every sample journey, loading, upload, validation error, Gemini outage, workpaper export, print, mobile and dark mode) in [`docs/screenshots/ui/`](docs/screenshots/ui/), with a [contact sheet](docs/screenshots/ui/00-contact-sheet.png). Regenerate with `node tools/e2e/screenshots.js`.
+
 ## The problem
 
 From FY 2023-24, s.43B(h) of the Income-tax Act, 1961 (s.37(2)(g) of the Income-tax Act, 2025 from tax year 2026-27) allows a deduction for a payment owed to a **micro or small enterprise** in the year it accrues only if it is paid within the time limit in s.15 of the MSMED Act, 2006. Otherwise the deduction moves to the year of payment.

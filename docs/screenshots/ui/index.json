@@ -1,0 +1,92 @@
+{
+  "shots": [
+    {
+      "file": "01-home-above-the-fold.png",
+      "title": "Landing page, above the fold"
+    },
+    {
+      "file": "02-home-full-page.png",
+      "title": "Landing page, full length"
+    },
+    {
+      "file": "03-workspace-empty-state.png",
+      "title": "Review tool, empty state"
+    },
+    {
+      "file": "04-who-does-what.png",
+      "title": "Who does what: Gemini, Tesseract, Python, accountant"
+    },
+    {
+      "file": "05-analyzing-in-progress.png",
+      "title": "Analysis in progress"
+    },
+    {
+      "file": "06-journey-a-valid-evidence.png",
+      "title": "Journey A: valid evidence moves the deadline"
+    },
+    {
+      "file": "07-journey-b-written-objection.png",
+      "title": "Journey B: written objection moves acceptance"
+    },
+    {
+      "file": "08-journey-b2-oral-objection.png",
+      "title": "Oral complaint: nothing moves, and why"
+    },
+    {
+      "file": "09-journey-c-contradiction.png",
+      "title": "Journey C: contradictory evidence routes to review"
+    },
+    {
+      "file": "10-journey-d-unreadable.png",
+      "title": "Journey D: unreadable photo, no conclusion"
+    },
+    {
+      "file": "11-journey-f-prompt-injection.png",
+      "title": "Journey F: injected instruction ignored"
+    },
+    {
+      "file": "12-workpaper-export.png",
+      "title": "Downloaded workpaper (.md) for the accountant"
+    },
+    {
+      "file": "13-print-view.png",
+      "title": "Print / save-as-PDF view"
+    },
+    {
+      "file": "14-upload-form-filled.png",
+      "title": "Upload form with evidence files chosen"
+    },
+    {
+      "file": "15-upload-result.png",
+      "title": "Result for uploaded evidence"
+    },
+    {
+      "file": "16-upload-rejected.png",
+      "title": "Upload validation error"
+    },
+    {
+      "file": "17-journey-e-gemini-unavailable.png",
+      "title": "Journey E: Gemini unavailable, nothing guessed"
+    },
+    {
+      "file": "18-mobile-home.png",
+      "title": "Mobile, landing"
+    },
+    {
+      "file": "19-mobile-result.png",
+      "title": "Mobile, verdict and timeline"
+    },
+    {
+      "file": "20-dark-home.png",
+      "title": "Dark mode, landing"
+    },
+    {
+      "file": "21-dark-result.png",
+      "title": "Dark mode, contradiction routed to review"
+    }
+  ],
+  "console_errors": [
+    "Failed to load resource: the server responded with a status of 415 (Unsupported Media Type)"
+  ],
+  "mobile_horizontal_overflow": false
+}
