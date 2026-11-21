@@ -108,3 +108,23 @@ def test_credit_days_not_in_quote_abstains():
     source = SourceText("text", "Payment within thirty days of invoice date.")
     doc = extraction(doc_type="contract", credit_days=30, credit_quote="Payment within thirty days of invoice date.")
     assert code(verify_document(doc, source, "INV-1").credit) == "CREDIT_NOT_IN_QUOTE"
+
+
+# A quote or date that starts or ends mid-token must not verify: "1 March 2026" is not in "21 March 2026".
+TRUNCATED_SOURCE = SourceText("text", "Goods inward note\nRECEIVED 21 March 2026 - Stores")
+TRUNCATED = Cited(date_text="1 March 2026", iso_date=date(2026, 3, 1), quote="1 March 2026 - Stores")
+
+
+def test_quote_cut_mid_token_is_not_found():
+    assert code(verify_cited(TRUNCATED, TRUNCATED_SOURCE)) == "QUOTE_NOT_FOUND"
+
+
+def test_date_cut_mid_token_inside_quote_is_rejected():
+    cited = Cited(date_text="1 March 2026", iso_date=date(2026, 3, 1), quote="RECEIVED 21 March 2026 - Stores")
+    assert code(verify_cited(cited, TRUNCATED_SOURCE)) == "DATE_NOT_IN_QUOTE"
+
+
+def test_image_date_cut_mid_token_is_not_in_ocr():
+    image = SourceText("image", "RECEIVED 21 March 2026 - Stores")
+    cited = Cited(date_text="1 March 2026", iso_date=date(2026, 3, 1), quote="RECEIVED 1 March 2026 - Stores")
+    assert code(verify_cited(cited, image)) == "DATE_NOT_IN_OCR"

@@ -46,6 +46,12 @@ def normalize(text: str) -> str:
     return " ".join(text.casefold().split())
 
 
+def contains(needle: str, haystack: str) -> bool:
+    """Normalized match that may not start or end mid-token: "1 march" is not inside "21 march"."""
+    pattern = rf"(?<!\w){re.escape(normalize(needle))}(?!\w)"
+    return re.search(pattern, normalize(haystack)) is not None
+
+
 def quote_problem(quote: str, source: SourceText) -> Abstention | None:
     if source.text is None:
         return Abstention("OCR_UNAVAILABLE", "image source could not be read independently")
@@ -53,7 +59,7 @@ def quote_problem(quote: str, source: SourceText) -> Abstention | None:
     if source.kind == "image":
         found = fuzz.partial_ratio(needle, haystack) >= OCR_CONTEXT_THRESHOLD
     else:
-        found = needle in haystack
+        found = contains(quote, source.text)
     return None if found else Abstention("QUOTE_NOT_FOUND", quote)
 
 
@@ -63,11 +69,11 @@ def verify_cited(cited: Cited, source: SourceText) -> Checked:
         return None
     if any(part is None for part in parts):
         return Abstention("INCOMPLETE_CITATION", f"date_text, iso_date and quote must all be present: {cited}")
-    if normalize(cited.date_text) not in normalize(cited.quote):
+    if not contains(cited.date_text, cited.quote):
         return Abstention("DATE_NOT_IN_QUOTE", f"{cited.date_text!r} not in {cited.quote!r}")
     if problem := quote_problem(cited.quote, source):
         return problem
-    if source.kind == "image" and normalize(cited.date_text) not in normalize(source.text):
+    if source.kind == "image" and not contains(cited.date_text, source.text):
         return Abstention("DATE_NOT_IN_OCR", f"{cited.date_text!r} not found exactly in OCR text")
     parsed = parse_date_text(cited.date_text, source.text)
     if isinstance(parsed, Abstention):
