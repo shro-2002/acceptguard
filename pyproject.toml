@@ -7,12 +7,15 @@ authors = [
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "fastapi==0.165.0",
     "google-genai==3.6.1",
     "pillow==13.0.0",
     "pydantic==2.14.4",
     "pypdf==7.1.1",
     "pytesseract==0.3.13",
+    "python-multipart==0.0.34",
     "rapidfuzz==3.14.6",
+    "uvicorn==0.54.0",
 ]
 
 [project.scripts]
@@ -24,6 +27,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "httpx==0.28.1",
     "pytest==9.2.0",
 ]
 

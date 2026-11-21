@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AcceptGuard</title>
+<meta name="description" content="Evidence-backed MSME payment deadlines for s.43B(h) review. Gemini extracts, Python verifies and computes, an accountant decides.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23243a63'/%3E%3Cpath d='M9 17l5 5 9-11' stroke='%23f6f3ec' stroke-width='3.2' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<a class="skip" href="#workspace">Skip to the review tool</a>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="/" aria-label="AcceptGuard home"><span class="mark" aria-hidden="true"></span>AcceptGuard</a>
+    <span class="pill">Synthetic demo &middot; accountant review required</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero wrap" aria-labelledby="hero-title">
+    <p class="eyebrow">MSMED Act s.2(b) &amp; s.15 &middot; Income-tax Act s.43B(h)</p>
+    <h1 id="hero-title">Ledgers know when you were invoiced.<br><em>Only evidence knows when goods were accepted.</em></h1>
+    <p class="lede">Under s.43B(h), a payment to a micro or small supplier is deductible this year only if it is made by the MSMED deadline, and that deadline runs from <strong>acceptance</strong>, not the invoice date. AcceptGuard reads delivery challans, emails, letters and contracts with Gemini, checks every quoted date against the source, computes the deadline in deterministic Python, and refuses to answer when the evidence does not support one.</p>
+    <ol class="flow" aria-label="How it works">
+      <li><b>1</b><span>Upload evidence</span></li>
+      <li><b>2</b><span>Gemini extracts dates &amp; quotes</span></li>
+      <li><b>3</b><span>Every quote checked against the source &amp; OCR</span></li>
+      <li><b>4</b><span>Deadline computed by fixed rules</span></li>
+      <li><b>5</b><span>Accountant reviews the workpaper</span></li>
+    </ol>
+  </section>
+
+  <section id="workspace" class="workspace wrap" aria-label="Review tool">
+    <div class="col-left">
+      <h2 class="step-title"><span>1</span> Pick a sample case</h2>
+      <p class="hint">Six synthetic cases from the evaluated test sets. Each one runs the live pipeline.</p>
+      <div id="samples" class="samples" role="list"></div>
+
+      <details class="upload" id="upload-panel">
+        <summary><span class="step-title small"><span>or</span> Upload your own evidence</span></summary>
+        <form id="upload-form" novalidate>
+          <p class="hint warn">Use synthetic or redacted documents only. Files are processed in memory for this request and not stored.</p>
+          <div class="grid">
+            <label>Invoice no.<input name="invoice_no" required pattern="[A-Za-z0-9][A-Za-z0-9_.\-]{0,39}" value="INV-1001"></label>
+            <label>Vendor category
+              <select name="vendor_category"><option>micro</option><option>small</option><option>medium</option><option>trader</option></select>
+            </label>
+            <label>Invoice date<input type="date" name="invoice_date" required value="2026-03-10"></label>
+            <label>Amount (INR)<input name="amount" inputmode="decimal" required value="118000.00"></label>
+            <label>Ledger credit days<input name="credit_days" inputmode="numeric" placeholder="blank = none"></label>
+            <label>Payment date<input type="date" name="payment_date"></label>
+            <label>Financial year end<input type="date" name="fy_end" required value="2026-03-31"></label>
+            <label>Status as of<input type="date" name="as_of" required value="2026-10-01"></label>
+          </div>
+          <label class="drop" id="drop">
+            <input type="file" name="files" id="files" multiple accept=".pdf,.png,.jpg,.jpeg,.txt,.eml">
+            <span id="drop-text">Drop challans, emails (.eml), letters, contracts or photos here, or <u>browse</u>. PDF, PNG, JPG, TXT, EML, up to 6 files.</span>
+          </label>
+          <ul id="file-list" class="file-list"></ul>
+          <button type="submit" class="btn primary" id="upload-btn">Analyze evidence</button>
+        </form>
+      </details>
+    </div>
+
+    <div class="col-right">
+      <h2 class="step-title"><span>2</span> Review</h2>
+      <div id="result" class="result" aria-live="polite">
+        <div class="empty">
+          <p class="empty-title">Nothing reviewed yet</p>
+          <p>Pick a sample on the left. You will see the verdict, every date it rests on, the exact quote behind each date, and why a case was sent to an accountant.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how wrap" aria-labelledby="how-title">
+    <h2 id="how-title">Who does what</h2>
+    <div class="roles">
+      <article><h3>Gemini <small>extracts</small></h3><p>One structured-output call per document returns each date exactly as written, its ISO value and the sentence it came from. The schema has no field for legal judgments or confidence scores.</p></article>
+      <article><h3>Tesseract <small>verifies images</small></h3><p>Photos and scans are OCR'd independently. The exact date token must appear in the OCR text, or the date is not used.</p></article>
+      <article><h3>Python <small>decides</small></h3><p>Quotes must exist word-for-word in the source, dates are re-parsed without guessing, and conflicts abstain. Acceptance and deadlines follow fixed MSMED rules.</p></article>
+      <article><h3>Accountant <small>signs off</small></h3><p>Every output is a candidate for review. Contested interpretations are labelled, and uncertain cases are routed to a person instead of answered.</p></article>
+    </div>
+  </section>
+</main>
+
+<footer class="foot wrap">
+  <p id="foot-meta">Not tax advice. Synthetic demo data only.</p>
+  <p><a href="https://github.com/shro-2002/acceptguard">Source and evaluation on GitHub</a></p>
+</footer>
+<script src="app.js"></script>
+</body>
+</html>

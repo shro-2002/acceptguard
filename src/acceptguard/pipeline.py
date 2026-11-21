@@ -8,10 +8,20 @@ from acceptguard.decide import InvoiceOutcome, decide, scope_gate
 from acceptguard.extract import ExtractionError, extract
 from acceptguard.ingest import LedgerRow, SourceText, evidence_files, load_ledger, source_text
 from acceptguard.models import Abstention, DocExtraction
-from acceptguard.verify import verify_document
+from acceptguard.verify import VerifiedDoc, verify_document
 
 Extractor = Callable[[Path], DocExtraction]
 SourceReader = Callable[[Path], SourceText]
+
+
+@dataclass(frozen=True)
+class DocRun:
+    """What one file contributed: the model's extraction and the verification of each field."""
+
+    path: Path
+    extraction: DocExtraction | None
+    verified: VerifiedDoc | None = None
+    error: str | None = None
 
 
 @dataclass(frozen=True)
@@ -19,6 +29,7 @@ class InvoiceRun:
     row: LedgerRow
     outcome: InvoiceOutcome
     files: tuple[Path, ...]
+    docs: tuple[DocRun, ...] = ()
 
 
 def default_extractor(path: Path) -> DocExtraction:
@@ -36,21 +47,29 @@ def run(
     return [_run_one(row, evidence_dir, period, extractor, reader) for row in load_ledger(ledger_path)]
 
 
+def run_invoice(row: LedgerRow, evidence_dir: Path, period: Period, *, extractor: Extractor = default_extractor,
+                reader: SourceReader = source_text) -> InvoiceRun:
+    """One ledger row; the web app uses this so it shares the exact evaluated code path."""
+    return _run_one(row, evidence_dir, period, extractor, reader)
+
+
 def _run_one(row: LedgerRow, evidence_dir: Path, period: Period, extractor: Extractor, reader: SourceReader) -> InvoiceRun:
     files = tuple(evidence_files(evidence_dir, row.invoice_no))
     if scope_gate(row):  # out-of-scope rows cost no model calls
         return InvoiceRun(row, decide(row, [], period), files)
-    verified = []
+    docs: list[DocRun] = []
     for path in files:
         try:
             extraction = extractor(path)
         except ExtractionError as error:
-            return InvoiceRun(row, _extraction_failed(row, period, error), files)
+            docs.append(DocRun(path, None, error=str(error)))
+            return InvoiceRun(row, _extraction_failed(row, period, error), files, tuple(docs))
         if not has_facts(extraction):
+            docs.append(DocRun(path, extraction))
             return InvoiceRun(row, _abstain(row, period, Abstention(
-                "NO_FACTS_EXTRACTED", f"{path.name}: no date or payment term was extracted; a person must read it")), files)
-        verified.append(verify_document(extraction, reader(path), row.invoice_no))
-    return InvoiceRun(row, decide(row, verified, period), files)
+                "NO_FACTS_EXTRACTED", f"{path.name}: no date or payment term was extracted; a person must read it")), files, tuple(docs))
+        docs.append(DocRun(path, extraction, verify_document(extraction, reader(path), row.invoice_no)))
+    return InvoiceRun(row, decide(row, [doc.verified for doc in docs], period), files, tuple(docs))
 
 
 def has_facts(extraction: DocExtraction) -> bool:

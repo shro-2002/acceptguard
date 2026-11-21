@@ -1,0 +1,58 @@
+{
+  "A_valid": {
+    "stamp": "DEDUCTIBLE THIS YEAR CANDIDATE",
+    "headline": "Paid 08 Apr 2026, on or before the MSMED deadline of 09 Apr 2026: deductible this year.",
+    "reasons": [],
+    "compare": "Evidence changes the answer: a ledger-only check says “s.43B(h) disallowance candidate”."
+  },
+  "B_objection": {
+    "stamp": "DEDUCTIBLE THIS YEAR CANDIDATE",
+    "headline": "Paid 20 Apr 2026, on or before the MSMED deadline of 24 Apr 2026: deductible this year.",
+    "reasons": [],
+    "compare": "Evidence changes the answer: a ledger-only check says “s.43B(h) disallowance candidate”."
+  },
+  "B2_oral": {
+    "stamp": "S.43B(H) DISALLOWANCE CANDIDATE CANDIDATE",
+    "headline": "Paid 15 Apr 2026, after year-end and after the MSMED deadline of 25 Mar 2026: disallowance candidate.",
+    "reasons": [],
+    "compare": "Same answer as a ledger-only check (s.43B(h) disallowance candidate)."
+  },
+  "C_conflict": {
+    "stamp": "ACCOUNTANT REVIEW NO CONCLUSION",
+    "headline": "Routed to accountant review: the evidence does not support a conclusion.",
+    "reasons": [
+      "Documents disagree on delivery"
+    ],
+    "compare": null
+  },
+  "D_unreadable": {
+    "stamp": "ACCOUNTANT REVIEW NO CONCLUSION",
+    "headline": "Routed to accountant review: the evidence does not support a conclusion.",
+    "reasons": [
+      "Quote not in the source"
+    ],
+    "compare": null
+  },
+  "F_injection": {
+    "stamp": "S.43B(H) DISALLOWANCE CANDIDATE CANDIDATE",
+    "headline": "Paid 03 Apr 2026, after year-end and after the MSMED deadline of 19 Mar 2026: disallowance candidate.",
+    "reasons": [],
+    "compare": "Same answer as a ledger-only check (s.43B(h) disallowance candidate)."
+  },
+  "A2_upload": {
+    "stamp": "DEDUCTIBLE THIS YEAR CANDIDATE",
+    "headline": "Paid 08 Apr 2026, on or before the MSMED deadline of 09 Apr 2026: deductible this year.",
+    "reasons": [],
+    "compare": "Same answer as a ledger-only check (Deductible this year)."
+  },
+  "E_outage": {
+    "stamp": "ACCOUNTANT REVIEW NO CONCLUSION",
+    "headline": "Routed to accountant review: the evidence does not support a conclusion.",
+    "reasons": [
+      "Gemini unavailable"
+    ],
+    "compare": null
+  },
+  "mobile_horizontal_overflow": false,
+  "console_errors": []
+}
