@@ -150,3 +150,13 @@ def test_amendment_word_with_a_single_date_is_fine():
     source = SourceText("text", "Corrected copy\nRECEIVED 21 March 2026 - Stores")
     verified = verify_document(_delivery_doc(21, "RECEIVED 21 March 2026 - Stores"), source, "INV-1")
     assert verified.problems == ()
+
+
+@pytest.mark.parametrize("text", [
+    "Receipt: 18 March 2026\nCorrected to 21 Mar (entry error)",     # second date has no year
+    "Receipt: 18 March 2026\nAmended: 21/03/26",                     # two-digit year
+    "Receipt: 18 March 2026\nRevised receipt 04/03/2026",            # ambiguous, does not parse
+])
+def test_amended_record_fails_closed_on_unparsed_dates(text):
+    verified = verify_document(_delivery_doc(18, "Receipt: 18 March 2026"), SourceText("text", text), "INV-1")
+    assert [p.code for p in verified.problems] == ["AMENDED_RECORD"]

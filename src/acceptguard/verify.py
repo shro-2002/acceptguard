@@ -15,11 +15,15 @@ OCR_CONTEXT_THRESHOLD = 90
 # A record that shows an amendment and more than one date needs a person to decide which entry stands.
 AMENDMENT_RE = re.compile(r"\b(correction|corrected|amend(?:ed|ment)?|revis(?:ed|ion)|supersed\w*|struck|"
                           r"strike\s*(?:through|off|out)|read\s+as|erratum|in\s+place\s+of|instead\s+of|cancell?ed)\b", re.I)
+_MONTH = r"(?:jan|feb|mar|apr|may|jun|jul|aug|sep|sept|oct|nov|dec)[a-z]*\.?"
+# Year-ful forms come first so the longest reading wins at each position; year-less named dates still count.
 DATE_TOKEN_RE = re.compile(
     r"\b\d{4}-\d{1,2}-\d{1,2}\b"
     r"|\b\d{1,2}([./-])\d{1,2}\1(?:\d{4}|\d{2})\b"
-    r"|\b\d{1,2}(?:st|nd|rd|th)?[\s.\-/,]*[A-Za-z]{3,9}\.?[\s.\-/,']+\d{4}\b"
-    r"|\b[A-Za-z]{3,9}\.?\s*\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}\b")
+    rf"|\b\d{{1,2}}(?:st|nd|rd|th)?[\s.\-/,]*{_MONTH}[\s.\-/,']+\d{{2,4}}\b"
+    rf"|\b{_MONTH}\s*\d{{1,2}}(?:st|nd|rd|th)?,?\s*\d{{4}}\b"
+    rf"|\b\d{{1,2}}(?:st|nd|rd|th)?\s*{_MONTH}(?![a-z])"
+    rf"|\b{_MONTH}\s+\d{{1,2}}(?:st|nd|rd|th)?\b", re.I)
 
 
 @dataclass(frozen=True)
@@ -118,11 +122,11 @@ def verify_credit(doc: DocExtraction, source: SourceText) -> VerifiedCredit | Ab
 
 
 def distinct_dates(text: str) -> set[object]:
+    """Every date-like token counts; one that does not parse is keyed by its raw text (fail closed)."""
     found: set[object] = set()
     for match in DATE_TOKEN_RE.finditer(text):
         parsed = parse_date_text(match.group(0), text)
-        if isinstance(parsed, date):
-            found.add(parsed)
+        found.add(parsed if isinstance(parsed, date) else normalize(match.group(0)))
     return found
 
 
