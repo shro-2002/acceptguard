@@ -147,14 +147,17 @@ def verify_document(doc: DocExtraction, source: SourceText, folder_invoice_no: s
     if amended := amendment_problem(source):
         problems += (amended,)
     header_dated = source.kind == "email" and doc.objection_location == "top_message"
-    recorded = verify_header_dated if header_dated else verify_cited
+    recorded = (verify_header_dated if header_dated else verify_cited)(doc.objection_recorded, source)
+    # A complaint record verified inside an email file is written [CA-2], whatever medium the model reports:
+    # the medium is a model claim, and injected text can steer it.
+    medium = "email" if source.kind == "email" and isinstance(recorded, VerifiedDate) else doc.objection_medium
     return VerifiedDoc(
         doc_type=doc.doc_type,
         problems=problems,
         delivery=verify_cited(doc.delivery, source),
         objection_raised=verify_cited(doc.objection_raised, source),
-        objection_recorded=recorded(doc.objection_recorded, source),
+        objection_recorded=recorded,
         objection_removed=verify_cited(doc.objection_removed, source),
-        objection_medium=doc.objection_medium,
+        objection_medium=medium,
         credit=verify_credit(doc, source),
     )
