@@ -97,10 +97,15 @@ def test_rate_limit(monkeypatch):
     assert codes[-1] == 429 and set(codes[:-1]) == {200}
 
 
-def test_spoofed_forwarded_for_does_not_reset_the_limit(monkeypatch):
+@pytest.mark.parametrize("trust_proxy", ["1", None])
+def test_spoofed_forwarded_for_does_not_reset_the_limit(monkeypatch, trust_proxy):
     monkeypatch.setattr(web, "extract", fake_extract)
+    if trust_proxy:
+        monkeypatch.setenv("TRUST_PROXY", trust_proxy)
+    else:
+        monkeypatch.delenv("TRUST_PROXY", raising=False)
     codes = [client.post("/api/analyze", data=FORM, files=[("files", ("c.txt", CHALLAN, "text/plain"))],
-                         headers={"x-forwarded-for": f"10.0.0.{i}, 203.0.113.7"}).status_code
+                         headers={"x-forwarded-for": f"10.0.0.{i}, 203.0.113.7" if trust_proxy else f"10.0.0.{i}"}).status_code
              for i in range(web.RATE_LIMIT + 1)]
     assert codes[-1] == 429
 

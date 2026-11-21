@@ -4,6 +4,7 @@ Gemini is called server-side only. Uploaded files live in a temporary directory 
 request and their extractions are not cached, so no document content is persisted. Samples are synthetic.
 """
 import logging
+import os
 import re
 import shutil
 import tempfile
@@ -162,9 +163,13 @@ async def _save(upload: UploadFile, folder: Path, index: int) -> None:
 
 
 def _client_id(request: Request) -> str:
-    """The rightmost X-Forwarded-For entry is the one our proxy appended; leftmost entries are client-controlled."""
+    """Behind a trusted proxy (TRUST_PROXY=1, set on Render) the rightmost X-Forwarded-For entry is the one the
+    proxy appended. Without one, any forwarded header is client-controlled, so only the socket address counts."""
+    peer = request.client.host if request.client else "unknown"
+    if os.environ.get("TRUST_PROXY") != "1":
+        return f"client:{peer}"
     forwarded = [part.strip() for part in request.headers.get("x-forwarded-for", "").split(",") if part.strip()]
-    return forwarded[-1] if forwarded else (request.client.host if request.client else "unknown")
+    return f"client:{forwarded[-1] if forwarded else peer}"
 
 
 def _check_decoded_size(data: bytes, suffix: str, label: str) -> None:
@@ -187,7 +192,7 @@ def _rate_limit(request: Request) -> None:
     with _hits_lock:
         for key in [k for k, v in _hits.items() if not v or now - v[-1] > RATE_WINDOW_S]:
             del _hits[key]  # forget idle clients so the table cannot grow without bound
-        everyone = _hits["*"]
+        everyone = _hits["global"]
         mine = _hits[_client_id(request)]
         for hits in (everyone, mine):
             while hits and now - hits[0] > RATE_WINDOW_S:

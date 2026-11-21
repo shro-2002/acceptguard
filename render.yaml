@@ -7,3 +7,5 @@ services:
     envVars:
       - key: GEMINI_API_KEY
         sync: false # set in the Render dashboard; never committed
+      - key: TRUST_PROXY
+        value: "1"
