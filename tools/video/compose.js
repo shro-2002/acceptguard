@@ -29,10 +29,10 @@ const SEGMENTS = [
     "re-parses each date, and applies the statute's 15- and 45-day rules.",
     "Every date on the timeline shows its source."] },
   { id: "s4", label: "Safety · abstain instead of guess", clip: "s4_safety", from: 0.4, audio: "s4_safety", lines: [
-    "When evidence is blurred, contradictory, or tries to instruct the AI,",
-    "AcceptGuard refuses to conclude, and tells the accountant exactly why.",
-    "On an untouched synthetic test set,",
-    "three runs produced no unsupported conclusions."] },
+    "When evidence is blurred or contradictory, AcceptGuard refuses to conclude,",
+    "and tells the accountant why. Instructions hidden in documents are treated as data.",
+    "On untouched synthetic test sets,",
+    "the final rules produced no unsupported conclusions."] },
 ];
 const END_AUDIO = "s5_close";
 const LEAD = 0.3, TAIL = 0.45;
