@@ -4,6 +4,9 @@ Written after held-out run 1 exposed a dropped-fact failure (KSF-0093) and after
 but before any model run on this set. It validates that fix on untouched cases. New buyer, suppliers and
 wording; written by a different model (Claude) than the system under test (Gemini). Prompt unchanged
 (extract_v2.md sha256 2d9043fdffc0). Photographs are SIMULATED. Labels are hand-derived from the rules.
+AT-316..318 were added after held-out runs 2-3 exposed DP-0419 (amended record) and the AMENDED_RECORD fix,
+still before any model run on this set. Labels state the ideal answer (the current entry), so the fix's
+abstentions count against it as unnecessary.
 """
 import csv
 import json
@@ -126,6 +129,23 @@ CASES: tuple[Case, ...] = (
                                        "Received in good condition on 27 March 2026 (GRN 9921)."),
               ext("other", invoice_ref="AT-315", delivery=c("27 March 2026", d(3, 27), "Received in good condition on 27 March 2026 (GRN 9921)."))),),
          "COMPUTED", "ALLOWED", None, "DISALLOWED", tags=("distractor_dates",)),
+    Case("AT-316", "buyer emails a correction to the arrival date", "Aravalli Textiles", "micro", d(3, 20), "44000.00", d(4, 8),
+         (Doc("arrival.eml", "email", ("Correction to my earlier mail: the cartons for invoice AT-316 arrived on 24 March 2026, not 22 March 2026 as I wrote.",),
+              ext("email", invoice_ref="AT-316", delivery=c("24 March 2026", d(3, 24),
+                  "Correction to my earlier mail: the cartons for invoice AT-316 arrived on 24 March 2026, not 22 March 2026 as I wrote.")),
+              sent=ist(3, 25)),),
+         "COMPUTED", "ALLOWED", None, "DISALLOWED", tags=("amendment",)),
+    Case("AT-317", "receipt entry overwritten, original value noted", "Coromandel Motors", "small", d(3, 25), "67000.00", d(4, 12),
+         (Doc("grn.txt", "txt", ("GOODS RECEIPT - invoice AT-317", "Date of receipt: 29 March 2026 (overwritten; originally 26 March 2026, see stores register)"),
+              ext("other", invoice_ref="AT-317", delivery=c("29 March 2026", d(3, 29),
+                  "Date of receipt: 29 March 2026 (overwritten; originally 26 March 2026, see stores register)"))),),
+         "COMPUTED", "ALLOWED", None, "DISALLOWED", tags=("amendment",)),
+    Case("AT-318", "revised acknowledgement supersedes an earlier letter", "Aravalli Textiles", "micro", d(3, 1), "25000.00", d(3, 25),
+         (Doc("acknowledgement.pdf", "pdf", ("Sahyadri Agro Exports Pvt Ltd", "This revised acknowledgement supersedes our letter of 2 March 2026.",
+                                             "Goods under invoice AT-318 were received on 5 March 2026."),
+              ext("other", invoice_ref="AT-318", delivery=c("5 March 2026", d(3, 5), "Goods under invoice AT-318 were received on 5 March 2026.")),
+              font=TNR, size=28),),
+         "COMPUTED", "ALLOWED", None, "ALLOWED", tags=("amendment",)),
 )
 
 

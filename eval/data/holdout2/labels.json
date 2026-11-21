@@ -1178,6 +1178,150 @@
           "simulated_ocr": null
         }
       ]
+    },
+    {
+      "invoice_no": "AT-316",
+      "title": "buyer emails a correction to the arrival date",
+      "tags": [
+        "amendment"
+      ],
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "arrival.eml",
+          "text": "Correction to my earlier mail: the cartons for invoice AT-316 arrived on 24 March 2026, not 22 March 2026 as I wrote.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "AT-316",
+            "delivery": {
+              "date_text": "24 March 2026",
+              "iso_date": "2026-03-24",
+              "quote": "Correction to my earlier mail: the cartons for invoice AT-316 arrived on 24 March 2026, not 22 March 2026 as I wrote."
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "AT-317",
+      "title": "receipt entry overwritten, original value noted",
+      "tags": [
+        "amendment"
+      ],
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "grn.txt",
+          "text": "GOODS RECEIPT - invoice AT-317\nDate of receipt: 29 March 2026 (overwritten; originally 26 March 2026, see stores register)",
+          "expected": {
+            "doc_type": "other",
+            "invoice_ref": "AT-317",
+            "delivery": {
+              "date_text": "29 March 2026",
+              "iso_date": "2026-03-29",
+              "quote": "Date of receipt: 29 March 2026 (overwritten; originally 26 March 2026, see stores register)"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "AT-318",
+      "title": "revised acknowledgement supersedes an earlier letter",
+      "tags": [
+        "amendment"
+      ],
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "acknowledgement.pdf",
+          "text": "Sahyadri Agro Exports Pvt Ltd\nThis revised acknowledgement supersedes our letter of 2 March 2026.\nGoods under invoice AT-318 were received on 5 March 2026.",
+          "expected": {
+            "doc_type": "other",
+            "invoice_ref": "AT-318",
+            "delivery": {
+              "date_text": "5 March 2026",
+              "iso_date": "2026-03-05",
+              "quote": "Goods under invoice AT-318 were received on 5 March 2026."
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
     }
   ]
 }
