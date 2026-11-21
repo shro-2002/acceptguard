@@ -1,0 +1,7 @@
+invoice_no,vendor,vendor_category,invoice_date,amount,credit_days,paid_amount,payment_date
+QX-501,Quill Labels,micro,2026-03-03,26000.00,,26000.00,2026-04-03
+QX-502,Quill Labels,micro,2026-03-01,31000.00,,31000.00,2026-04-02
+QX-503,Quill Labels,micro,2026-03-05,18000.00,,18000.00,2026-04-08
+QX-504,Quill Labels,small,2026-03-01,54000.00,45,54000.00,2026-04-16
+QX-505,Quill Labels,micro,2026-03-08,22000.00,,22000.00,2026-03-30
+QX-506,Quill Valves,small,2026-03-09,88000.00,,88000.00,2026-04-13
