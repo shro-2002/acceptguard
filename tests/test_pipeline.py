@@ -126,3 +126,17 @@ def test_late_written_objection_is_explained(runs):
     notes = " ".join(runs["INV-005"].outcome.notes)
     assert "2026-03-28 is after the objection window closed on 2026-03-25" in notes
     assert "Complaint first raised 2026-03-20" in notes
+
+
+def test_document_that_yields_no_facts_routes_to_ca(dataset):
+    """A dropped fact is invisible to verification, so a file that contributes nothing must not be ignored."""
+    def drops_challan_facts(path: Path) -> DocExtraction:
+        if path.parent.name == "INV-012" and path.name == "challan.png":
+            return DocExtraction.model_validate({"doc_type": "other", **{k: {} for k in (
+                "delivery", "objection_raised", "objection_recorded", "objection_removed")}})
+        return perfect_extractor(path)
+
+    found = run(dataset / "ledger.csv", dataset / "evidence", PERIOD, extractor=drops_challan_facts, reader=simulated_reader)
+    outcome = next(r.outcome for r in found if r.outcome.invoice_no == "INV-012")
+    assert (outcome.status, outcome.reasons[0].code) == ("ABSTAIN", "NO_FACTS_EXTRACTED")
+    assert "challan.png" in outcome.reasons[0].detail

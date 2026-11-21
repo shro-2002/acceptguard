@@ -46,10 +46,23 @@ def _run_one(row: LedgerRow, evidence_dir: Path, period: Period, extractor: Extr
             extraction = extractor(path)
         except ExtractionError as error:
             return InvoiceRun(row, _extraction_failed(row, period, error), files)
+        if not has_facts(extraction):
+            return InvoiceRun(row, _abstain(row, period, Abstention(
+                "NO_FACTS_EXTRACTED", f"{path.name}: no date or payment term was extracted; a person must read it")), files)
         verified.append(verify_document(extraction, reader(path), row.invoice_no))
     return InvoiceRun(row, decide(row, verified, period), files)
 
 
-def _extraction_failed(row: LedgerRow, period: Period, error: ExtractionError) -> InvoiceOutcome:
+def has_facts(extraction: DocExtraction) -> bool:
+    """A dropped fact cannot be caught by verification, so every uploaded file must contribute one."""
+    cited = (extraction.delivery, extraction.objection_raised, extraction.objection_recorded, extraction.objection_removed)
+    return any(c.date_text or c.iso_date or c.quote for c in cited) or extraction.credit_days is not None
+
+
+def _abstain(row: LedgerRow, period: Period, reason: Abstention) -> InvoiceOutcome:
     ledger = ledger_baseline(row.invoice_date, row.credit_days, row.payment_date, period).decision
-    return InvoiceOutcome(row.invoice_no, "ABSTAIN", None, ledger, (Abstention("EXTRACTION_FAILED", str(error)),))
+    return InvoiceOutcome(row.invoice_no, "ABSTAIN", None, ledger, (reason,))
+
+
+def _extraction_failed(row: LedgerRow, period: Period, error: ExtractionError) -> InvoiceOutcome:
+    return _abstain(row, period, Abstention("EXTRACTION_FAILED", str(error)))
