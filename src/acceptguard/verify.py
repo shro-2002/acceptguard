@@ -12,6 +12,15 @@ from acceptguard.models import Abstention, Cited, DocExtraction
 # Fuzzy matching only covers the words around a date in OCR text; the date itself must match exactly.
 OCR_CONTEXT_THRESHOLD = 90
 
+# A record that shows an amendment and more than one date needs a person to decide which entry stands.
+AMENDMENT_RE = re.compile(r"\b(correction|corrected|amend(?:ed|ment)?|revis(?:ed|ion)|supersed\w*|struck|"
+                          r"strike\s*(?:through|off|out)|read\s+as|erratum|in\s+place\s+of|instead\s+of|cancell?ed)\b", re.I)
+DATE_TOKEN_RE = re.compile(
+    r"\b\d{4}-\d{1,2}-\d{1,2}\b"
+    r"|\b\d{1,2}([./-])\d{1,2}\1(?:\d{4}|\d{2})\b"
+    r"|\b\d{1,2}(?:st|nd|rd|th)?[\s.\-/,]*[A-Za-z]{3,9}\.?[\s.\-/,']+\d{4}\b"
+    r"|\b[A-Za-z]{3,9}\.?\s*\d{1,2}(?:st|nd|rd|th)?,?\s*\d{4}\b")
+
 
 @dataclass(frozen=True)
 class VerifiedDate:
@@ -108,6 +117,21 @@ def verify_credit(doc: DocExtraction, source: SourceText) -> VerifiedCredit | Ab
     return VerifiedCredit(doc.credit_days, doc.credit_basis or "unspecified", doc.credit_quote)
 
 
+def distinct_dates(text: str) -> set[object]:
+    found: set[object] = set()
+    for match in DATE_TOKEN_RE.finditer(text):
+        parsed = parse_date_text(match.group(0), text)
+        if isinstance(parsed, date):
+            found.add(parsed)
+    return found
+
+
+def amendment_problem(source: SourceText) -> Abstention | None:
+    if source.text and AMENDMENT_RE.search(source.text) and len(distinct_dates(source.text)) > 1:
+        return Abstention("AMENDED_RECORD", "the document shows an amendment and more than one date; a person must decide which entry stands")
+    return None
+
+
 def _ref_key(ref: str) -> str:
     return re.sub(r"[\s\-_/]", "", ref).casefold()
 
@@ -116,6 +140,8 @@ def verify_document(doc: DocExtraction, source: SourceText, folder_invoice_no: s
     problems: tuple[Abstention, ...] = ()
     if doc.invoice_ref and _ref_key(doc.invoice_ref) != _ref_key(folder_invoice_no):
         problems = (Abstention("MISFILED", f"document cites {doc.invoice_ref}, filed under {folder_invoice_no}"),)
+    if amended := amendment_problem(source):
+        problems += (amended,)
     header_dated = source.kind == "email" and doc.objection_location == "top_message"
     recorded = verify_header_dated if header_dated else verify_cited
     return VerifiedDoc(

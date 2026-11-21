@@ -128,3 +128,25 @@ def test_image_date_cut_mid_token_is_not_in_ocr():
     image = SourceText("image", "RECEIVED 21 March 2026 - Stores")
     cited = Cited(date_text="1 March 2026", iso_date=date(2026, 3, 1), quote="RECEIVED 1 March 2026 - Stores")
     assert code(verify_cited(cited, image)) == "DATE_NOT_IN_OCR"
+
+
+AMENDED_SOURCE = SourceText("text", "GOODS RECEIPT NOTE\nReceipt date: 18 March 2026\n"
+                                    "CORRECTION: receipt date amended to 21 March 2026 (entry error)")
+
+
+def _delivery_doc(day: int, quote: str) -> DocExtraction:
+    empty = {k: Cited() for k in ("objection_raised", "objection_recorded", "objection_removed")}
+    return DocExtraction(doc_type="other", delivery=Cited(date_text=f"{day} March 2026", iso_date=date(2026, 3, day), quote=quote), **empty)
+
+
+@pytest.mark.parametrize("day,quote", [(18, "Receipt date: 18 March 2026"),
+                                       (21, "CORRECTION: receipt date amended to 21 March 2026 (entry error)")])
+def test_amended_record_with_two_dates_routes_to_ca(day, quote):
+    verified = verify_document(_delivery_doc(day, quote), AMENDED_SOURCE, "INV-1")
+    assert [p.code for p in verified.problems] == ["AMENDED_RECORD"]
+
+
+def test_amendment_word_with_a_single_date_is_fine():
+    source = SourceText("text", "Corrected copy\nRECEIVED 21 March 2026 - Stores")
+    verified = verify_document(_delivery_doc(21, "RECEIVED 21 March 2026 - Stores"), source, "INV-1")
+    assert verified.problems == ()
