@@ -9,11 +9,12 @@ Labels come from the generator spec, never from model output.
 import argparse
 import hashlib
 import json
+import time
 from datetime import date, datetime
 from pathlib import Path
 
 from acceptguard.clock import Period
-from acceptguard.extract import MODEL_ID, PROMPT_PATH, ExtractionRecord, extract
+from acceptguard.extract import DEFAULT_CACHE_DIR, MODEL_ID, PROMPT_PATH, ExtractionError, ExtractionRecord, extract
 from acceptguard.ingest import source_text
 from acceptguard.models import DocExtraction
 from acceptguard.pipeline import run
@@ -25,13 +26,24 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("data", type=Path)
     parser.add_argument("--ocr", choices=("simulated", "tesseract"), required=True)
+    parser.add_argument("--cache-dir", type=Path, default=DEFAULT_CACHE_DIR, help="empty dir = uncached run")
+    parser.add_argument("--tag", default="", help="suffix for the results file, e.g. run1")
     args = parser.parse_args()
     labels = json.loads((args.data / "labels.json").read_text())
     docs = {(inv["invoice_no"], doc["file"]): doc for inv in labels["invoices"] for doc in inv["docs"]}
     records: dict[Path, ExtractionRecord] = {}
+    latency: dict[str, float] = {}
+    failures: list[str] = []
 
     def extractor(path: Path) -> DocExtraction:
-        records[path] = extract(path)
+        start = time.perf_counter()
+        try:
+            records[path] = extract(path, cache_dir=args.cache_dir)
+        except ExtractionError as error:
+            failures.append(str(error)[:300])
+            raise
+        finally:
+            latency[f"{path.parent.name}/{path.name}"] = round(time.perf_counter() - start, 3)
         return records[path].extraction
 
     def reader(path: Path):
@@ -47,12 +59,17 @@ def main() -> None:
     cases = [_score_case(inv, runs[inv["invoice_no"]]) for inv in labels["invoices"]]
     fields = _score_fields(records, docs)
     summary = _summary(cases, fields, records)
+    uncached = [latency[f"{p.parent.name}/{p.name}"] for p, r in records.items() if not r.cached]
+    summary["model_request_failures"] = len(failures)
+    summary["latency_s_uncached"] = _latency_stats(uncached)
     _print(cases, summary)
-    out = Path("eval/results") / f"{args.data.name}-{args.ocr}.json"
+    suffix = f"-{args.tag}" if args.tag else ""
+    out = Path("eval/results") / f"{args.data.name}-{args.ocr}{suffix}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     meta = {"model_id": MODEL_ID, "prompt_sha256": hashlib.sha256(PROMPT_PATH.read_bytes()).hexdigest()[:12],
             "ocr": args.ocr, "run_at": datetime.now().isoformat(timespec="seconds"), "data": str(args.data)}
-    out.write_text(json.dumps({"meta": meta, "summary": summary, "cases": cases, "fields": fields}, indent=2))
+    out.write_text(json.dumps({"meta": meta, "summary": summary, "cases": cases, "fields": fields,
+                               "failures": failures, "latency_s": latency}, indent=2))
     print(f"\nwritten {out}")
 
 
@@ -75,7 +92,8 @@ def _score_case(label: dict, outcome) -> dict:
 
 def _score_fields(records: dict[Path, ExtractionRecord], docs: dict) -> dict:
     """Field-level date match on non-null ground truth: correct, wrong value, or missed (null)."""
-    tally = {name: {"correct": 0, "wrong": 0, "missed": 0} for name in (*DATE_FIELDS, "credit_days", "objection_recorded")}
+    tally = {name: {"correct": 0, "wrong": 0, "missed": 0, "spurious": 0}
+             for name in (*DATE_FIELDS, "credit_days", "objection_recorded")}
     for path, record in records.items():
         truth = DocExtraction.model_validate(docs[(path.parent.name, path.name)]["expected"])
         got = record.extraction
@@ -83,8 +101,12 @@ def _score_fields(records: dict[Path, ExtractionRecord], docs: dict) -> dict:
             want, have = getattr(truth, name).iso_date, getattr(got, name).iso_date
             if want is not None:
                 tally[name]["correct" if have == want else "missed" if have is None else "wrong"] += 1
+            elif have is not None:  # model reported a date the document does not state (or that is unreadable)
+                tally[name]["spurious"] += 1
         if truth.credit_days is not None:
             tally["credit_days"]["correct" if got.credit_days == truth.credit_days else "wrong"] += 1
+        elif got.credit_days is not None:
+            tally["credit_days"]["spurious"] += 1
         if truth.objection_recorded.quote is not None:  # date comes from the email header; score presence
             tally["objection_recorded"]["correct" if got.objection_recorded.quote else "missed"] += 1
     return tally
@@ -109,6 +131,13 @@ def _summary(cases: list[dict], fields: dict, records: dict) -> dict:
         "tokens_in_out": [tokens_in, tokens_out],
         "fields": fields,
     }
+
+
+def _latency_stats(values: list[float]) -> dict | None:
+    if not values:
+        return None
+    ordered = sorted(values)
+    return {"n": len(ordered), "median": ordered[len(ordered) // 2], "max": ordered[-1], "total": round(sum(ordered), 2)}
 
 
 def _print(cases: list[dict], summary: dict) -> None:
