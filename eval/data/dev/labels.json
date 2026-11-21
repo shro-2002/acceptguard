@@ -1,0 +1,1201 @@
+{
+  "fy_end": "2026-03-31",
+  "as_of": "2026-10-01",
+  "invoices": [
+    {
+      "invoice_no": "INV-001",
+      "title": "clean delivery, paid within the year",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-001\nDispatch date: 9 March 2026\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-001",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-002",
+      "title": "written objection day 11 removed day 30 (demo 1)",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-002\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-002",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "objection.eml",
+          "text": "Invoice INV-002: batch 7 has cracked housings.\nWe reject the consignment until it is replaced.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-002",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": "2026-03-21",
+              "quote": "We reject the consignment until it is replaced."
+            },
+            "objection_medium": "email",
+            "objection_location": "top_message",
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "removal.eml",
+          "text": "Replacement units for invoice INV-002 were delivered and accepted on 9 April 2026.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-002",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": "9 April 2026",
+              "iso_date": "2026-04-09",
+              "quote": "Replacement units for invoice INV-002 were delivered and accepted on 9 April 2026."
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-003",
+      "title": "written objection on day 15 is inside the window",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-003\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-003",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "objection.eml",
+          "text": "Invoice INV-003: batch 7 has cracked housings.\nWe reject the consignment until it is replaced.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-003",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": "2026-03-25",
+              "quote": "We reject the consignment until it is replaced."
+            },
+            "objection_medium": "email",
+            "objection_location": "top_message",
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "removal.eml",
+          "text": "Replacement units for invoice INV-003 were delivered and accepted on 5 April 2026.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-003",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": "5 April 2026",
+              "iso_date": "2026-04-05",
+              "quote": "Replacement units for invoice INV-003 were delivered and accepted on 5 April 2026."
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-004",
+      "title": "written objection on day 16 is outside the window",
+      "expected_status": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-004\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-004",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "objection.eml",
+          "text": "Invoice INV-004: batch 7 has cracked housings.\nWe reject the consignment until it is replaced.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-004",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": "2026-03-26",
+              "quote": "We reject the consignment until it is replaced."
+            },
+            "objection_medium": "email",
+            "objection_location": "top_message",
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "removal.eml",
+          "text": "Replacement units for invoice INV-004 were delivered and accepted on 5 April 2026.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-004",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": "5 April 2026",
+              "iso_date": "2026-04-05",
+              "quote": "Replacement units for invoice INV-004 were delivered and accepted on 5 April 2026."
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-005",
+      "title": "phone complaint day 10, written only on day 18 (demo 2)",
+      "expected_status": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-005\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-005",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "objection.eml",
+          "text": "Invoice INV-005: as discussed on the phone on 20/03/2026, batch 7 is defective.\nPlease treat this email as our formal rejection.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-005",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": "20/03/2026",
+              "iso_date": "2026-03-20",
+              "quote": "Invoice INV-005: as discussed on the phone on 20/03/2026, batch 7 is defective."
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": "2026-03-28",
+              "quote": "Please treat this email as our formal rejection."
+            },
+            "objection_medium": "email",
+            "objection_location": "top_message",
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-006",
+      "title": "goods received 15 days after the invoice",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-006\nDispatch date: 10 March 2026\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 25 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-006",
+            "delivery": {
+              "date_text": "25 March 2026",
+              "iso_date": "2026-03-25",
+              "quote": "RECEIVED 25 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-007",
+      "title": "contract: 30 days from delivery",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-007\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-007",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "contract.pdf",
+          "text": "MASTER SUPPLY AGREEMENT - Kaveri Auto Components Pvt Ltd and Sharma Precision Castings\nClause 7. Payment shall be made within 30 days of delivery of the goods.",
+          "expected": {
+            "doc_type": "contract",
+            "invoice_ref": null,
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": 30,
+            "credit_basis": "delivery",
+            "credit_quote": "Clause 7. Payment shall be made within 30 days of delivery of the goods.",
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-008",
+      "title": "contract: 60 days capped at 45",
+      "expected_status": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-008\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 1 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-008",
+            "delivery": {
+              "date_text": "1 March 2026",
+              "iso_date": "2026-03-01",
+              "quote": "RECEIVED 1 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "contract.pdf",
+          "text": "MASTER SUPPLY AGREEMENT - Kaveri Auto Components Pvt Ltd and Sharma Precision Castings\nClause 7. Payment shall be made within 60 days of delivery of the goods.",
+          "expected": {
+            "doc_type": "contract",
+            "invoice_ref": null,
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": 60,
+            "credit_basis": "delivery",
+            "credit_quote": "Clause 7. Payment shall be made within 60 days of delivery of the goods.",
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-009",
+      "title": "ledger says 30 days, no contract, both readings agree",
+      "expected_status": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-009\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 20 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-009",
+            "delivery": {
+              "date_text": "20 March 2026",
+              "iso_date": "2026-03-20",
+              "quote": "RECEIVED 20 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-010",
+      "title": "ledger says 30 days, no contract, readings disagree",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "CONTRACT_NOT_PROVIDED",
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-010\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 20 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-010",
+            "delivery": {
+              "date_text": "20 March 2026",
+              "iso_date": "2026-03-20",
+              "quote": "RECEIVED 20 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-011",
+      "title": "blurred receipt stamp (demo 3)",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "DATE_NOT_IN_OCR",
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-011\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 12 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-011",
+            "delivery": {
+              "date_text": "12 March 2026",
+              "iso_date": "2026-03-12",
+              "quote": "RECEIVED 12 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-011\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 1? Mar?h 2O26 - Stores, Kaveri Auto Components Pvt Ltd"
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-012",
+      "title": "challan and email disagree on delivery",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "CONFLICT_DELIVERY",
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-012\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 12 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-012",
+            "delivery": {
+              "date_text": "12 March 2026",
+              "iso_date": "2026-03-12",
+              "quote": "RECEIVED 12 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "delivery.eml",
+          "text": "We received the goods for invoice INV-012 on 14 March 2026.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-012",
+            "delivery": {
+              "date_text": "14 March 2026",
+              "iso_date": "2026-03-14",
+              "quote": "We received the goods for invoice INV-012 on 14 March 2026."
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-013",
+      "title": "numeric dates with day and month both 12 or less",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "AMBIGUOUS_DATE",
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-013\nDispatch date: 01/04/2026\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 03/04/2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-013",
+            "delivery": {
+              "date_text": "03/04/2026",
+              "iso_date": "2026-04-03",
+              "quote": "RECEIVED 03/04/2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-014",
+      "title": "dispatch date is a distractor; receipt date changes the outcome",
+      "expected_status": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-014\nDispatch date: 02/03/2026\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 25/03/2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-014",
+            "delivery": {
+              "date_text": "25/03/2026",
+              "iso_date": "2026-03-25",
+              "quote": "RECEIVED 25/03/2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-015",
+      "title": "written objection never resolved",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "OBJECTION_UNRESOLVED",
+      "expected_ledger_decision": "DISALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-015\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-015",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        },
+        {
+          "file": "objection.eml",
+          "text": "Invoice INV-015: batch 7 has cracked housings.\nWe reject the consignment until it is replaced.",
+          "expected": {
+            "doc_type": "email",
+            "invoice_ref": "INV-015",
+            "delivery": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": "2026-03-15",
+              "quote": "We reject the consignment until it is replaced."
+            },
+            "objection_medium": "email",
+            "objection_location": "top_message",
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-016",
+      "title": "medium enterprise is out of scope",
+      "expected_status": "OUT_OF_SCOPE",
+      "expected_decision": null,
+      "expected_reason": "OUT_OF_SCOPE",
+      "expected_ledger_decision": null,
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-016\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-016",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-017",
+      "title": "part-payment is out of scope",
+      "expected_status": "OUT_OF_SCOPE",
+      "expected_decision": null,
+      "expected_reason": "OUT_OF_SCOPE_PARTIAL",
+      "expected_ledger_decision": null,
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-017\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-017",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    },
+    {
+      "invoice_no": "INV-018",
+      "title": "challan filed under the wrong invoice",
+      "expected_status": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "MISFILED",
+      "expected_ledger_decision": "ALLOWED",
+      "docs": [
+        {
+          "file": "challan.png",
+          "text": "DELIVERY CHALLAN  Supplier: Sharma Precision Castings\nInvoice No: INV-081\nGoods: 400 x aluminium housings, batch 7\nRECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd",
+          "expected": {
+            "doc_type": "challan",
+            "invoice_ref": "INV-081",
+            "delivery": {
+              "date_text": "10 March 2026",
+              "iso_date": "2026-03-10",
+              "quote": "RECEIVED 10 March 2026 - Stores, Kaveri Auto Components Pvt Ltd"
+            },
+            "objection_raised": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_recorded": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "objection_medium": null,
+            "objection_location": null,
+            "objection_removed": {
+              "date_text": null,
+              "iso_date": null,
+              "quote": null
+            },
+            "credit_days": null,
+            "credit_basis": null,
+            "credit_quote": null,
+            "illegible_regions": []
+          },
+          "simulated_ocr": null
+        }
+      ]
+    }
+  ]
+}

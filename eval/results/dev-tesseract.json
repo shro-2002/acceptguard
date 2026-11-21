@@ -1,0 +1,296 @@
+{
+  "meta": {
+    "model_id": "gemini-3.5-flash-lite",
+    "prompt_sha256": "2d9043fdffc0",
+    "ocr": "tesseract",
+    "run_at": "2026-11-21T15:58:25",
+    "data": "eval/data/dev"
+  },
+  "summary": {
+    "invoices_scored": 16,
+    "false_confident": 0,
+    "computed": 9,
+    "computed_correct": 9,
+    "abstained": 7,
+    "abstention_recall": "6/6",
+    "unnecessary_abstentions": 1,
+    "documents_extracted": 27,
+    "cache_hits": 27,
+    "tokens_in_out": [
+      35934,
+      7327
+    ],
+    "fields": {
+      "delivery": {
+        "correct": 16,
+        "wrong": 1,
+        "missed": 0
+      },
+      "objection_raised": {
+        "correct": 1,
+        "wrong": 0,
+        "missed": 0
+      },
+      "objection_removed": {
+        "correct": 3,
+        "wrong": 0,
+        "missed": 0
+      },
+      "credit_days": {
+        "correct": 2,
+        "wrong": 0,
+        "missed": 0
+      },
+      "objection_recorded": {
+        "correct": 5,
+        "wrong": 0,
+        "missed": 0
+      }
+    }
+  },
+  "cases": [
+    {
+      "invoice_no": "INV-001",
+      "title": "clean delivery, paid within the year",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-002",
+      "title": "written objection day 11 removed day 30 (demo 1)",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-003",
+      "title": "written objection on day 15 is inside the window",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-004",
+      "title": "written objection on day 16 is outside the window",
+      "expected": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "CONFLICT_DELIVERY",
+      "verdict": "unnecessary_abstention",
+      "detail": "2026-03-10, 2026-04-05"
+    },
+    {
+      "invoice_no": "INV-005",
+      "title": "phone complaint day 10, written only on day 18 (demo 2)",
+      "expected": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "DISALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-006",
+      "title": "goods received 15 days after the invoice",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-007",
+      "title": "contract: 30 days from delivery",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-008",
+      "title": "contract: 60 days capped at 45",
+      "expected": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "DISALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-009",
+      "title": "ledger says 30 days, no contract, both readings agree",
+      "expected": "COMPUTED",
+      "expected_decision": "DISALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "DISALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-010",
+      "title": "ledger says 30 days, no contract, readings disagree",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "CONTRACT_NOT_PROVIDED",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "CONTRACT_NOT_PROVIDED",
+      "verdict": "ok",
+      "detail": "decision differs between due 2026-04-04 and 2026-04-19"
+    },
+    {
+      "invoice_no": "INV-011",
+      "title": "blurred receipt stamp (demo 3)",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "DATE_NOT_IN_OCR",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "MISFILED",
+      "verdict": "abstained_other_reason",
+      "detail": "document cites INV-511, filed under INV-011"
+    },
+    {
+      "invoice_no": "INV-012",
+      "title": "challan and email disagree on delivery",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "CONFLICT_DELIVERY",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "CONFLICT_DELIVERY",
+      "verdict": "ok",
+      "detail": "2026-03-12, 2026-03-14"
+    },
+    {
+      "invoice_no": "INV-013",
+      "title": "numeric dates with day and month both 12 or less",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "AMBIGUOUS_DATE",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "AMBIGUOUS_DATE",
+      "verdict": "ok",
+      "detail": "03/04/2026: document convention is unknown"
+    },
+    {
+      "invoice_no": "INV-014",
+      "title": "dispatch date is a distractor; receipt date changes the outcome",
+      "expected": "COMPUTED",
+      "expected_decision": "ALLOWED",
+      "expected_reason": null,
+      "got": "COMPUTED",
+      "decision": "ALLOWED",
+      "reason": null,
+      "verdict": "ok",
+      "detail": ""
+    },
+    {
+      "invoice_no": "INV-015",
+      "title": "written objection never resolved",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "OBJECTION_UNRESOLVED",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "OBJECTION_UNRESOLVED",
+      "verdict": "ok",
+      "detail": "written objection with no removal date in evidence"
+    },
+    {
+      "invoice_no": "INV-016",
+      "title": "medium enterprise is out of scope",
+      "expected": "OUT_OF_SCOPE",
+      "expected_decision": null,
+      "expected_reason": "OUT_OF_SCOPE",
+      "got": "OUT_OF_SCOPE",
+      "decision": null,
+      "reason": "OUT_OF_SCOPE",
+      "verdict": "ok",
+      "detail": "vendor category 'medium' is not micro or small"
+    },
+    {
+      "invoice_no": "INV-017",
+      "title": "part-payment is out of scope",
+      "expected": "OUT_OF_SCOPE",
+      "expected_decision": null,
+      "expected_reason": "OUT_OF_SCOPE_PARTIAL",
+      "got": "OUT_OF_SCOPE",
+      "decision": null,
+      "reason": "OUT_OF_SCOPE_PARTIAL",
+      "verdict": "ok",
+      "detail": "part-payments are not handled"
+    },
+    {
+      "invoice_no": "INV-018",
+      "title": "challan filed under the wrong invoice",
+      "expected": "ABSTAIN",
+      "expected_decision": null,
+      "expected_reason": "MISFILED",
+      "got": "ABSTAIN",
+      "decision": null,
+      "reason": "MISFILED",
+      "verdict": "ok",
+      "detail": "document cites INV-081, filed under INV-018"
+    }
+  ],
+  "fields": {
+    "delivery": {
+      "correct": 16,
+      "wrong": 1,
+      "missed": 0
+    },
+    "objection_raised": {
+      "correct": 1,
+      "wrong": 0,
+      "missed": 0
+    },
+    "objection_removed": {
+      "correct": 3,
+      "wrong": 0,
+      "missed": 0
+    },
+    "credit_days": {
+      "correct": 2,
+      "wrong": 0,
+      "missed": 0
+    },
+    "objection_recorded": {
+      "correct": 5,
+      "wrong": 0,
+      "missed": 0
+    }
+  }
+}

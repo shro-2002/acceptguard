@@ -1,0 +1,32 @@
+[project]
+name = "acceptguard"
+version = "0.1.0"
+description = "Add your description here"
+authors = [
+    { name = "shro-2002", email = "96790181+shro-2002@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "google-genai==3.6.1",
+    "pillow==13.0.0",
+    "pydantic==2.14.4",
+    "pypdf==7.1.1",
+    "pytesseract==0.3.13",
+    "rapidfuzz==3.14.6",
+]
+
+[project.scripts]
+acceptguard = "acceptguard.cli:main"
+
+[build-system]
+requires = ["uv_build>=0.11.21,<0.12.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest==9.2.0",
+]
+
+[tool.pytest.ini_options]
+# macOS can mark the editable-install .pth file hidden, and Python 3.13 skips hidden .pth files.
+pythonpath = ["src"]
