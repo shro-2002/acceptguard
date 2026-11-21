@@ -12,6 +12,8 @@ from acceptguard.models import Abstention, Cited, DocExtraction
 # Fuzzy matching only covers the words around a date in OCR text; the date itself must match exactly.
 OCR_CONTEXT_THRESHOLD = 90
 
+SPOKEN_MEDIA = frozenset({"phone", "in_person"})
+
 # A record that shows an amendment and more than one date needs a person to decide which entry stands.
 AMENDMENT_RE = re.compile(r"\b(correction|corrected|amend(?:ed|ment)?|revis(?:ed|ion)|supersed\w*|struck|"
                           r"strike\s*(?:through|off|out)|read\s+as|erratum|in\s+place\s+of|instead\s+of|cancell?ed)\b", re.I)
@@ -148,14 +150,20 @@ def verify_document(doc: DocExtraction, source: SourceText, folder_invoice_no: s
         problems += (amended,)
     header_dated = source.kind == "email" and doc.objection_location == "top_message"
     recorded = (verify_header_dated if header_dated else verify_cited)(doc.objection_recorded, source)
-    # A complaint record verified inside an email file is written [CA-2], whatever medium the model reports:
-    # the medium is a model claim, and injected text can steer it.
-    medium = "email" if source.kind == "email" and isinstance(recorded, VerifiedDate) else doc.objection_medium
+    # A complaint in the newest message of an email file is a written record [CA-2], whatever medium the model
+    # reports: the medium is a model claim, and injected text can steer it. Quoted text keeps the model's medium.
+    medium = "email" if header_dated and isinstance(recorded, VerifiedDate) else doc.objection_medium
+    raised = verify_cited(doc.objection_raised, source)
+    quoted = next((c for c in (recorded, raised) if isinstance(c, VerifiedDate)), None)
+    if medium in SPOKEN_MEDIA and quoted is not None and source.kind in ("text", "image") and not header_dated:
+        # The complaint is quoted from a written document (an export, letter or scan), yet the model calls it oral.
+        # Injected text can steer the medium (held-out 3, QX-502), so a person resolves the contradiction.
+        problems += (Abstention("MEDIUM_CONFLICT", f"model reports a {medium} complaint for text in a written document: {quoted.quote!r}"),)
     return VerifiedDoc(
         doc_type=doc.doc_type,
         problems=problems,
         delivery=verify_cited(doc.delivery, source),
-        objection_raised=verify_cited(doc.objection_raised, source),
+        objection_raised=raised,
         objection_recorded=recorded,
         objection_removed=verify_cited(doc.objection_removed, source),
         objection_medium=medium,

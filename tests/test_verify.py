@@ -172,3 +172,35 @@ def test_complaint_recorded_in_an_email_is_written_whatever_the_model_says():
     verified = verify_document(doc, source, "X-1")
     assert isinstance(verified.objection_recorded, VerifiedDate)
     assert verified.objection_medium == "email"
+
+
+def _complaint_doc(medium: str, location: str | None, quote: str, day: int | None = None) -> DocExtraction:
+    empty = {k: Cited() for k in ("delivery", "objection_raised", "objection_removed")}
+    recorded = Cited(quote=quote) if day is None else Cited(date_text=f"{day} March 2026", iso_date=date(2026, 3, day), quote=quote)
+    return DocExtraction(doc_type="other", objection_medium=medium, objection_location=location, objection_recorded=recorded, **empty)
+
+
+def test_phone_date_quoted_inside_an_email_keeps_the_model_medium():
+    """Only the email itself is forced to 'written'; a phone call it reports stays oral."""
+    text = "Further to our call on 8 March 2026 about the dents, see below."
+    source = SourceText("email", f"Date: Wed, 25 Mar 2026 10:00:00 +0530\n\n{text}", date(2026, 3, 25))
+    verified = verify_document(_complaint_doc("phone", "quoted_text", text, 8), source, "X-1")
+    assert verified.objection_medium == "phone"
+
+
+def test_spoken_medium_for_a_quoted_written_record_routes_to_ca():
+    """Injection steered the model to 'phone' for a WhatsApp rejection; a verified written quote contradicts it."""
+    line = "[06/03/26, 10:05] Anil: Invoice X-1 cartons are wet. We reject this lot in writing."
+    source = SourceText("text", line + "\n[19/03/26, 16:40] Supplier: replaced today.")
+    doc = _complaint_doc("phone", "attachment", line).model_copy(update={"objection_recorded": Cited(date_text="06/03/26", iso_date=date(2026, 3, 6), quote=line)})
+    assert [p.code for p in verify_document(doc, source, "X-1").problems] == ["MEDIUM_CONFLICT"]
+
+
+def test_spoken_medium_for_a_quoted_complaint_raised_in_a_written_export_routes_to_ca():
+    """Held-out 3, QX-502: the model moved the rejection to 'raised', called it a phone call, left 'recorded' empty."""
+    line = "[06/03/26, 10:05] Anil: Invoice X-1 cartons are wet. We reject this lot in writing."
+    source = SourceText("text", line + "\n[19/03/26, 16:40] Supplier: replaced today.")
+    empty = {k: Cited() for k in ("delivery", "objection_recorded", "objection_removed")}
+    doc = DocExtraction(doc_type="other", objection_medium="phone",
+                        objection_raised=Cited(date_text="06/03/26", iso_date=date(2026, 3, 6), quote=line), **empty)
+    assert [p.code for p in verify_document(doc, source, "X-1").problems] == ["MEDIUM_CONFLICT"]
