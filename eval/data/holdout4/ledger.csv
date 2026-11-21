@@ -1,0 +1,5 @@
+invoice_no,vendor,vendor_category,invoice_date,amount,credit_days,paid_amount,payment_date
+ZK-601,Zenith Bearings,micro,2026-03-03,47000.00,,47000.00,2026-04-04
+ZK-602,Zenith Bearings,micro,2026-03-02,36000.00,,36000.00,2026-04-06
+ZK-603,Zenith Pumps,small,2026-03-04,93000.00,,93000.00,2026-04-07
+ZK-604,Zenith Glass,micro,2026-03-04,19000.00,,19000.00,2026-04-05

@@ -1,0 +1,2 @@
+[09/03/26, 12:20] Priya (QC): Invoice ZK-604 jars are leaking, we are rejecting the lot.
+[22/03/26, 11:05] Supplier: Leak-tested jars for ZK-604 swapped in at your stores today.
