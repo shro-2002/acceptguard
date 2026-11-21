@@ -72,7 +72,7 @@ function captionTimes(lines, start, length) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 } });
   await png(page, `<div class="slate"><span class="warn">PLACEHOLDER: replace with the builder's on-camera introduction (10 s)</span>
     <p class="mono">Recording script</p>
-    <p class="script">"Hi, I'm [name], a builder from [city]. I built AcceptGuard because Indian businesses lose tax deductions on payments to small suppliers when nobody can prove when goods were actually accepted. It uses Gemini to read the evidence, and rules, not guesses, to decide."</p></div>`, "intro.png", false);
+    <p class="script">"Hi, I'm [name] from [city]. I built AcceptGuard. It uses Gemini to read the evidence behind supplier invoices, so businesses can prove when goods were accepted, and keep their tax deductions."</p></div>`, "intro.png", false);
   await png(page, `<div class="slate"><p class="mono">AcceptGuard · built with Google Gemini</p>
     <h1>Evidence first,<br><em>then the answer.</em></h1>
     <div class="roles"><div><span>extracts</span><b>Gemini</b></div><div><span>verifies images</span><b>Tesseract</b></div><div><span>decides</span><b>Python rules</b></div><div><span>signs off</span><b>Accountant</b></div></div>
