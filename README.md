@@ -51,9 +51,10 @@ AcceptGuard is built to say "I don't know" rather than be wrong. It abstains, wi
 - documents disagree on delivery, resolution or credit terms, or a document is filed under the wrong invoice;
 - **an uploaded file yields no facts at all** (a dropped fact is invisible to verification; added after held-out failure 1);
 - **a document shows an amendment and more than one date**, so which entry stands is a judgment call (added after held-out failure 2);
+- **the model calls a complaint oral while its quote sits in a written document** (export, letter, scan, or email body; only the newest email message itself counts as written automatically): the medium is a model claim that injected text can steer (added after held-out failure 3);
 - a written objection has no resolution, the ledger claims credit days without a contract and the answer depends on it, the vendor is a trader (unsettled law), or Gemini is unavailable.
 
-**Prompt injection.** Uploaded text is sent only as document content, never as instructions; the system prompt tells the model to report facts only; output must match a strict schema; and any value it reports must be found in the source and re-derived by Python. Five injection documents in the held-out sets (challan, email, contract, delivery note, email postscript) were resisted in every run. Injection resistance is not guaranteed: an injected date that is also written in the document could pass verification if the model chose it.
+**Prompt injection.** Uploaded text is sent only as document content, never as instructions; the system prompt tells the model to report facts only; output must match a strict schema; and every value must be found in the source and re-derived by Python. That is not enough on its own. Across 12 injection documents in the held-out sets, Gemini **followed the injected instruction in 6, in every run**: five relabelled a written complaint as a phone call or in-person, and one invented a written objection. It resisted the 6 that tried to change delivery dates or credit terms. Of the 6 it followed, deterministic rules caught 3 (the newest email message is always written; a "spoken" claim about written text abstains), 2 ended in abstentions for other reasons, and 1 (held-out 3, QX-502) got through before the last rule existed. Injection resistance comes from the rules, not the model, and is not guaranteed.
 
 ## Evaluation
 
@@ -64,17 +65,20 @@ Headline metric: **wrong computed conclusions** (computed and wrong). Abstaining
 | Set | What it is | Wrong computed | Computed correct | Required abstentions met | Unnecessary abstentions |
 |---|---|---|---|---|---|
 | Dev | 16 invoices; prompt developed here | 0 | 9/9 | 6/6 | 1 |
-| Held-out 1, original code | 22 invoices, 3 uncached runs | **1 · 1 · 1** (gate failed) | 8/9 · 7/8 · 7/8 | 8/9 · 9/9 · 9/9 | 5 · 5 · 5 |
-| Held-out 2, untouched, after fixes | 17 invoices, 3 uncached runs | **0 · 0 · 0** | 8/8 · 8/8 · 8/8 | 2/2 · 2/2 · 2/2 | 7 · 7 · 7 |
+| Held-out 1 | 22 invoices, 3 uncached runs, original code | **1 · 1 · 1** (gate failed) | 8/9 · 7/8 · 7/8 | 8/9 · 9/9 · 9/9 | 5 · 5 · 5 |
+| Held-out 2 | 17 invoices, untouched, after fixes 1-2 | **0 · 0 · 0** | 8/8 · 8/8 · 8/8 | 2/2 · 2/2 · 2/2 | 7 · 7 · 7 |
+| Held-out 3 | 6 injection-focused invoices, untouched | **1 · 1 · 1** (gate failed) | 4/5 · 4/5 · 4/5 | n/a | 1 · 1 · 1 |
+| Held-out 4 | 4 injection-focused invoices, untouched, after fix | **0 · 0 · 0** | 1/1 · 1/1 · 1/1 | n/a | 3 · 3 · 3 |
 
-**The release gate failed twice on held-out set 1 and both failures are preserved** in the git history and results:
+**The release gate failed three times and every failure is preserved** in the git history and results:
 
-1. *KSF-0093:* Gemini returned nothing for an ERP inward-register export, so a delivery-date conflict vanished and the remaining email produced a confident answer. Fix: a file that yields no facts routes to review.
-2. *DP-0419:* a receipt note showed the original date and an initialled correction; Gemini cited the original. Both quotes really are in the document, so verification passed. Fix: amended records with several dates route to review.
+1. *Held-out 1, KSF-0093:* Gemini returned nothing for an ERP inward-register export, so a delivery-date conflict vanished and the remaining email produced a confident answer. Fix: a file that yields no facts routes to review.
+2. *Held-out 1, DP-0419:* a receipt note showed the original date and an initialled correction; Gemini cited the original. Both quotes really are in the document, so verification passed. Fix: amended records with several dates route to review.
+3. *Held-out 3, QX-502:* an instruction inside a WhatsApp export made Gemini describe a written rejection as a phone call, so the objection disappeared. (A post-hoc audit had found the same steering in held-out 1, VPW-2219, hidden by an unrelated abstention.) Fix: a spoken-medium claim about text quoted from a written document routes to review.
 
-Both fixes were then evaluated on **held-out set 2**, written after the fixes and run only once the set was committed. It produced no wrong computed conclusions in three uncached runs, at a high cost: 7 of 17 invoices abstained unnecessarily (replacement deliveries mistaken for first deliveries, a repair date the model ignored, an OCR misread of a simulated photo, and the two new rules' own costs). Cost was about $0.03 per 31-document run; median latency was about 2 s per document.
+Each fix was then evaluated on a set it had never seen. The last two untouched rounds (held-out 2 and 4) produced no wrong computed conclusions in six uncached runs, and re-checking every set's stored extractions with the final code also gives zero (post-hoc, so not independent evidence). The cost is high: on held-out 2, 7 of 17 invoices abstained unnecessarily; on held-out 4, 3 of 4, including a genuine phone-call log. Cost was about $0.03 per 31-document run; median latency was about 2 s per document.
 
-**What this does not show.** Small n, synthetic data written by the author (and by Claude, a different model from the system under test), clean renders, simulated rather than real photographs, and labels decided by one person. Zero observed errors on 24 computed answers is not evidence of production safety. The legal rules have not been reviewed by a chartered accountant.
+**What this does not show.** Small n, synthetic data written by the author (and by Claude, a different model from the system under test), clean renders, simulated rather than real photographs, and labels decided by one person. Zero observed errors on 27 computed answers in the last untouched rounds is not evidence of production safety, and each untouched set was written by the same author who wrote the fixes. The legal rules have not been reviewed by a chartered accountant.
 
 ## Run it locally
 
@@ -98,7 +102,7 @@ PYTHONPATH=src uv run --env-file .env acceptguard eval/data/dev/ledger.csv eval/
 ### Tests and evaluation
 
 ```bash
-uv run pytest                     # 135 tests, no API key needed
+uv run pytest                     # 141 tests, no API key needed
 PYTHONPATH=src uv run --env-file .env python eval/score.py eval/data/holdout2 --ocr tesseract --cache-dir .cache/fresh --tag mine
 PYTHONPATH=src uv run python eval/report.py   # rebuild docs/EVALUATION_TABLES.md
 ```
@@ -133,7 +137,7 @@ src/acceptguard/
   pipeline.py         one code path for CLI, web and evaluation
   web/                FastAPI app, explanations, static UI
 eval/                 dev and held-out sets, generators, scorer, results
-tests/                135 tests
+tests/                141 tests
 tools/                Playwright journeys and demo-video scripts
 ```
 

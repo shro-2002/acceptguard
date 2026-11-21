@@ -3,7 +3,7 @@
     "model_id": "gemini-3.5-flash-lite",
     "prompt_sha256": "2d9043fdffc0",
     "ocr": "tesseract",
-    "run_at": "2026-11-22T00:28:16",
+    "run_at": "2026-11-22T00:30:36",
     "data": "eval/data/holdout4"
   },
   "summary": {

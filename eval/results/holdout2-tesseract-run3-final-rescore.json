@@ -3,7 +3,7 @@
     "model_id": "gemini-3.5-flash-lite",
     "prompt_sha256": "2d9043fdffc0",
     "ocr": "tesseract",
-    "run_at": "2026-11-22T00:28:13",
+    "run_at": "2026-11-22T00:30:34",
     "data": "eval/data/holdout2"
   },
   "summary": {
@@ -321,7 +321,7 @@
     "AT-306/rejection.eml": 0.002,
     "AT-306/replacement.eml": 0.001,
     "AT-307/challan.png": 0.001,
-    "AT-307/rejection.eml": 0.002,
+    "AT-307/rejection.eml": 0.001,
     "AT-307/replacement.eml": 0.001,
     "AT-308/challan.png": 0.001,
     "AT-308/contract.pdf": 0.003,
@@ -331,7 +331,7 @@
     "AT-311/receipt.eml": 0.001,
     "AT-313/challan.png": 0.001,
     "AT-313/contract.pdf": 0.001,
-    "AT-313/rejection.eml": 0.002,
+    "AT-313/rejection.eml": 0.003,
     "AT-313/service_report.txt": 0.001,
     "AT-314/challan.jpg": 0.001,
     "AT-315/transport.txt": 0.001,

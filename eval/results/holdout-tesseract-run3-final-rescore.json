@@ -3,7 +3,7 @@
     "model_id": "gemini-3.5-flash-lite",
     "prompt_sha256": "2d9043fdffc0",
     "ocr": "tesseract",
-    "run_at": "2026-11-22T00:28:09",
+    "run_at": "2026-11-22T00:30:29",
     "data": "eval/data/holdout"
   },
   "summary": {
@@ -372,7 +372,7 @@
     "DP-0419/grn.png": 0.001,
     "KSF-0101/challan.png": 0.001,
     "KSF-0101/receipt.eml": 0.002,
-    "VPW-2218/challan.png": 0.001,
+    "VPW-2218/challan.png": 0.002,
     "VPW-2218/contract.pdf": 0.001,
     "VPW-2218/purchase_order.txt": 0.001,
     "DP-0420/challan.png": 0.001,

@@ -138,17 +138,6 @@ def amendment_problem(source: SourceText) -> Abstention | None:
     return None
 
 
-QUOTED_MARKER_RE = re.compile(r"^\s*(>|-{2,}\s*forwarded message|on .+ wrote:)", re.I | re.M)
-
-
-def _in_quoted_region(quote: str, text: str) -> bool:
-    """Python's own check that a quote sits after a reply/forward marker; the model's 'quoted_text' label is not trusted."""
-    marker = QUOTED_MARKER_RE.search(text)
-    if marker is None:
-        return False
-    return contains(quote, text[marker.start():]) and not contains(quote, text[:marker.start()])
-
-
 def _ref_key(ref: str) -> str:
     return re.sub(r"[\s\-_/]", "", ref).casefold()
 
@@ -166,10 +155,10 @@ def verify_document(doc: DocExtraction, source: SourceText, folder_invoice_no: s
     medium = "email" if header_dated and isinstance(recorded, VerifiedDate) else doc.objection_medium
     raised = verify_cited(doc.objection_raised, source)
     quoted = next((c for c in (recorded, raised) if isinstance(c, VerifiedDate)), None)
-    in_quoted_region = source.kind == "email" and quoted is not None and _in_quoted_region(quoted.quote, source.text or "")
-    if medium in SPOKEN_MEDIA and quoted is not None and not header_dated and not in_quoted_region:
-        # The complaint is quoted from a written document (an export, letter or scan), yet the model calls it oral.
-        # Injected text can steer the medium (held-out 3, QX-502), so a person resolves the contradiction.
+    if medium in SPOKEN_MEDIA and quoted is not None and not header_dated:
+        # The complaint is quoted from a written document (export, letter, scan or email body), yet the model calls
+        # it oral. Injected text can steer the medium (held-out 3, QX-502), so a person resolves it. No exemption
+        # for "quoted" email text: a reply/forward marker is attacker-controllable too.
         problems += (Abstention("MEDIUM_CONFLICT", f"model reports a {medium} complaint for text in a written document: {quoted.quote!r}"),)
     return VerifiedDoc(
         doc_type=doc.doc_type,
