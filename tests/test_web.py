@@ -95,3 +95,20 @@ def test_rate_limit(monkeypatch):
     monkeypatch.setattr(web, "extract", fake_extract)
     codes = [upload([("c.txt", CHALLAN, "text/plain")]).status_code for _ in range(web.RATE_LIMIT + 1)]
     assert codes[-1] == 429 and set(codes[:-1]) == {200}
+
+
+def test_spoofed_forwarded_for_does_not_reset_the_limit(monkeypatch):
+    monkeypatch.setattr(web, "extract", fake_extract)
+    codes = [client.post("/api/analyze", data=FORM, files=[("files", ("c.txt", CHALLAN, "text/plain"))],
+                         headers={"x-forwarded-for": f"10.0.0.{i}, 203.0.113.7"}).status_code
+             for i in range(web.RATE_LIMIT + 1)]
+    assert codes[-1] == 429
+
+
+def test_oversized_image_is_rejected(monkeypatch):
+    import io
+    from PIL import Image
+    monkeypatch.setattr(web, "MAX_IMAGE_PIXELS", 100)
+    buffer = io.BytesIO()
+    Image.new("RGB", (20, 20), "white").save(buffer, "PNG")
+    assert upload([("big.png", buffer.getvalue(), "image/png")]).status_code == 413

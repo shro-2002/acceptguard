@@ -19,6 +19,8 @@ from acceptguard.models import Abstention
 
 EVIDENCE_SUFFIXES = {".pdf", ".png", ".jpg", ".jpeg", ".txt", ".eml"}
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg"}
+OCR_TIMEOUT_S = 30
+MAX_OCR_PIXELS = 40_000_000
 
 Ocr = Callable[[bytes], str | None]
 
@@ -83,7 +85,11 @@ def tesseract_ocr(image: bytes) -> str | None:
     import pytesseract
     from PIL import Image
 
-    return pytesseract.image_to_string(Image.open(BytesIO(image)))
+    Image.MAX_IMAGE_PIXELS = MAX_OCR_PIXELS  # larger images raise instead of being decoded
+    try:
+        return pytesseract.image_to_string(Image.open(BytesIO(image)), timeout=OCR_TIMEOUT_S)
+    except (RuntimeError, Image.DecompressionBombError, OSError):
+        return None  # OCR could not run: dates from this image stay unverified, so the invoice abstains
 
 
 def source_text(path: Path, ocr: Ocr = tesseract_ocr) -> SourceText:

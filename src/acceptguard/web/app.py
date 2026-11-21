@@ -9,6 +9,7 @@ import shutil
 import tempfile
 import threading
 import time
+from io import BytesIO
 from collections import defaultdict, deque
 from datetime import date
 from pathlib import Path
@@ -17,11 +18,13 @@ from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 from starlette.concurrency import run_in_threadpool
+from PIL import Image
 from pydantic import ValidationError
+from pypdf import PdfReader
 
 from acceptguard.clock import Period
 from acceptguard.extract import MODEL_ID, PROMPT_PATH, extract
-from acceptguard.ingest import EVIDENCE_SUFFIXES, LedgerRow, evidence_files, load_ledger
+from acceptguard.ingest import EVIDENCE_SUFFIXES, IMAGE_SUFFIXES, LedgerRow, evidence_files, load_ledger
 from acceptguard.pipeline import run_invoice
 from acceptguard.web.samples import SAMPLES, Sample
 from acceptguard.web.serialize import invoice_json
@@ -33,6 +36,9 @@ MAX_FILES = 6
 MAX_FILE_BYTES = 8 * 1024 * 1024
 RATE_WINDOW_S = 600
 RATE_LIMIT = 15  # analyses per client per window
+GLOBAL_RATE_LIMIT = 150  # analyses per window across all clients: caps spend on the shared Gemini key
+MAX_PDF_PAGES = 10
+MAX_IMAGE_PIXELS = 40_000_000
 MAX_CONCURRENT = 3
 INVOICE_NO_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,39}$")
 SAFE_NAME_RE = re.compile(r"[^A-Za-z0-9_.-]+")
@@ -150,21 +156,46 @@ async def _save(upload: UploadFile, folder: Path, index: int) -> None:
         raise HTTPException(422, f"{original[:60]}: file is empty.")
     if suffix in MAGIC and not data.startswith(MAGIC[suffix]):
         raise HTTPException(415, f"{original[:60]}: contents do not match the {suffix} type.")
+    _check_decoded_size(data, suffix, original[:60])
     stem = SAFE_NAME_RE.sub("-", Path(original).stem).strip("-.")[:40] or "file"
     (folder / f"{index + 1:02d}-{stem}{suffix}").write_bytes(data)  # server-chosen name: no path traversal
 
 
+def _client_id(request: Request) -> str:
+    """The rightmost X-Forwarded-For entry is the one our proxy appended; leftmost entries are client-controlled."""
+    forwarded = [part.strip() for part in request.headers.get("x-forwarded-for", "").split(",") if part.strip()]
+    return forwarded[-1] if forwarded else (request.client.host if request.client else "unknown")
+
+
+def _check_decoded_size(data: bytes, suffix: str, label: str) -> None:
+    """Bound the work a small upload can cause: decompression bombs, huge images, very long PDFs."""
+    try:
+        if suffix in IMAGE_SUFFIXES:
+            with Image.open(BytesIO(data)) as image:
+                if image.width * image.height > MAX_IMAGE_PIXELS:
+                    raise HTTPException(413, f"{label}: image is too large to process.")
+        elif suffix == ".pdf" and len(PdfReader(BytesIO(data)).pages) > MAX_PDF_PAGES:
+            raise HTTPException(413, f"{label}: PDFs are limited to {MAX_PDF_PAGES} pages.")
+    except HTTPException:
+        raise
+    except Exception:  # unreadable or bomb-like files are rejected, never processed
+        raise HTTPException(415, f"{label}: file could not be read.") from None
+
+
 def _rate_limit(request: Request) -> None:
-    forwarded = request.headers.get("x-forwarded-for", "")
-    client = forwarded.split(",")[0].strip() or (request.client.host if request.client else "unknown")
     now = time.monotonic()
     with _hits_lock:
-        hits = _hits[client]
-        while hits and now - hits[0] > RATE_WINDOW_S:
-            hits.popleft()
-        if len(hits) >= RATE_LIMIT:
+        for key in [k for k, v in _hits.items() if not v or now - v[-1] > RATE_WINDOW_S]:
+            del _hits[key]  # forget idle clients so the table cannot grow without bound
+        everyone = _hits["*"]
+        mine = _hits[_client_id(request)]
+        for hits in (everyone, mine):
+            while hits and now - hits[0] > RATE_WINDOW_S:
+                hits.popleft()
+        if len(mine) >= RATE_LIMIT or len(everyone) >= GLOBAL_RATE_LIMIT:
             raise HTTPException(429, "Demo limit reached: try again in a few minutes.", headers={"Retry-After": "120"})
-        hits.append(now)
+        mine.append(now)
+        everyone.append(now)
 
 
 class _slot:
