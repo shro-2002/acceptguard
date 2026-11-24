@@ -10,7 +10,7 @@ const intro = process.argv[3] ? path.resolve(process.argv[3]) : null;
 const cards = path.join(dir, "cards");
 fs.mkdirSync(cards, { recursive: true });
 const dur = (f) => Number(execFileSync("ffprobe", ["-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", f]).toString());
-const INTRO = intro ? Math.min(10, dur(intro)) : 10;
+const INTRO = intro ? Math.min(Number(process.env.INTRO_MAX || 10), dur(intro)) : 10; // INTRO_MAX: longest intro kept, in seconds
 
 const SEGMENTS = [
   { id: "s1", label: "The problem", clip: "s1_hero", from: 0, audio: "s1_problem", lines: [
